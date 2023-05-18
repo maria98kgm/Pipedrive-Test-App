@@ -1,28 +1,25 @@
 import { useEffect, useState } from "react";
-import AppExtensionsSDK, { Command, Modal } from "@pipedrive/app-extensions-sdk";
+import AppExtensionsSDK, { Command } from "@pipedrive/app-extensions-sdk";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
+  const [token, setToken] = useState("");
 
   useEffect(() => {
     initializeSDK();
-  });
+  }, []);
 
   async function initializeSDK() {
     const sdk = await new AppExtensionsSDK().initialize();
-    const { status } = await sdk.execute(Command.OPEN_MODAL, {
-      type: Modal.CUSTOM_MODAL,
-      action_id: "Open settings",
-      data: {
-        item: "xyz",
-      },
-    });
+    const { token } = await sdk.execute(Command.GET_SIGNED_TOKEN);
 
-    console.log(status);
+    if (token) setToken(token);
   }
+
+  console.log(token);
 
   return (
     <>
@@ -40,6 +37,7 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
+        <p>{token}</p>
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
     </>
