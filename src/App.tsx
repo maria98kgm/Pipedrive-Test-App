@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import AppExtensionsSDK from "@pipedrive/app-extensions-sdk";
+import AppExtensionsSDK, { Command, Modal } from "@pipedrive/app-extensions-sdk";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
@@ -12,7 +12,16 @@ function App() {
   });
 
   async function initializeSDK() {
-    await new AppExtensionsSDK().initialize();
+    const sdk = await new AppExtensionsSDK().initialize();
+    const { status } = await sdk.execute(Command.OPEN_MODAL, {
+      type: Modal.CUSTOM_MODAL,
+      action_id: "Open settings",
+      data: {
+        item: "xyz",
+      },
+    });
+
+    console.log(status);
   }
 
   return (
