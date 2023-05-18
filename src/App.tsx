@@ -6,10 +6,13 @@ import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [token, setToken] = useState("");
+  const [token, setToken] = useState("8e3cb4591d3891478a2f79a3faa3bf1e1134e50f");
+  const [dealId, setDealId] = useState("");
 
   useEffect(() => {
     initializeSDK();
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    setDealId(urlSearchParams.get("selectedIds") || "");
   }, []);
 
   async function initializeSDK() {
@@ -18,8 +21,6 @@ function App() {
 
     if (token) setToken(token);
   }
-
-  console.log(token);
 
   return (
     <>
@@ -37,7 +38,6 @@ function App() {
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
-        <p>{token}</p>
       </div>
       <p className="read-the-docs">Click on the Vite and React logos to learn more</p>
     </>
