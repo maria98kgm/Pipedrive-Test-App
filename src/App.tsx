@@ -1,26 +1,36 @@
 import { useEffect, useState } from "react";
-import AppExtensionsSDK, { Command } from "@pipedrive/app-extensions-sdk";
+import AppExtensionsSDK from "@pipedrive/app-extensions-sdk";
 import reactLogo from "./assets/react.svg";
 import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
   const [count, setCount] = useState(0);
-  const [token, setToken] = useState("8e3cb4591d3891478a2f79a3faa3bf1e1134e50f");
+  // const [token, setToken] = useState("");
   const [dealId, setDealId] = useState("");
 
   useEffect(() => {
     initializeSDK();
     const urlSearchParams = new URLSearchParams(window.location.search);
     setDealId(urlSearchParams.get("selectedIds") || "");
+    localStorage.setItem("name", "nnnnn");
+    console.log(localStorage.getItem("name"));
   }, []);
 
   async function initializeSDK() {
-    const sdk = await new AppExtensionsSDK().initialize();
-    const { token } = await sdk.execute(Command.GET_SIGNED_TOKEN);
+    await new AppExtensionsSDK().initialize();
+    // const { token } = await sdk.execute(Command.GET_SIGNED_TOKEN);
 
-    if (token) setToken(token);
+    // if (token) {
+    //   setToken(token);
+    //   fetch(`https://api.pipedrive.com/v1/users/me?api_token=${token}`)
+    //     .then((res) => res.json())
+    //     .then((res) => console.log("res", res));
+    // }
   }
+
+  // console.log(token, dealId);
+  console.log(dealId, window.location.href);
 
   return (
     <>
