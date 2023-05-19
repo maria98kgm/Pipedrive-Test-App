@@ -1,7 +1,7 @@
 import { useSearchParams } from "react-router-dom";
 
 const Auth = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
 
   console.log(searchParams);
 
