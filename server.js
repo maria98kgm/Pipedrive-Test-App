@@ -22,7 +22,7 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       const userInfo = await getUser(accessToken);
-      const postRes = await UsersDAO.postUser(userInfo, accessToken, refreshToken);
+      const postRes = await UsersDAO.postUser(userInfo.data, accessToken, refreshToken);
       console.log(postRes);
       done();
     }
