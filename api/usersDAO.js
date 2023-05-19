@@ -7,7 +7,7 @@ export default class UsersDAO {
     }
 
     try {
-      users = await conn.db(process.env.USERS_NS).collection("restaurants");
+      users = await conn.db(process.env.USERS_NS).collection("users");
     } catch (err) {
       console.log(`Unable to establish a connection handle in usersDAO: ${err}`);
     }
