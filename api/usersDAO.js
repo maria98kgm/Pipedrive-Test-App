@@ -16,7 +16,7 @@ export default class UsersDAO {
   static async postUser(user, token, refreshToken) {
     try {
       const userDoc = {
-        user_id: user._id,
+        user_id: user.id,
         name: user.name,
         company_domain: user.company_domain,
         token: token,
