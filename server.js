@@ -74,17 +74,17 @@ app.get("/deal_fields", async (req, res) => {
 });
 
 app.get("/create_person_field", async (req, res) => {
-  const fieldInfo = await UsersDAO.getUser(req.query);
-  const res = await createPersonField(user.token, fieldInfo.fieldName, fieldInfo.fieldType);
+  const user = await UsersDAO.getUser(req.query.domain_name);
+  const apiRes = await createPersonField(user.token, req.query.fieldName, req.query.fieldType);
 
-  res.json({ res: res });
+  res.json({ res: apiRes });
 });
 
 app.get("/create_deal_field", async (req, res) => {
-  const fieldInfo = await UsersDAO.getUser(req.query.domain_name);
-  const res = await createDealField(user.token, fieldInfo.fieldName, fieldInfo.fieldType);
+  const user = await UsersDAO.getUser(req.query.domain_name);
+  const apiRes = await createDealField(user.token, req.query.fieldName, req.query.fieldType);
 
-  res.json({ res: res });
+  res.json({ res: apiRes });
 });
 
 export default app;

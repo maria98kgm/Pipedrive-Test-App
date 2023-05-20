@@ -51,6 +51,7 @@ async function createPersonField(accessToken, fieldName, fieldType) {
   return await fetch(`https://api.pipedrive.com/v1/personFields`, {
     method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(body),
@@ -66,6 +67,7 @@ async function createDealField(accessToken, fieldName, fieldType) {
   return await fetch(`https://api.pipedrive.com/v1/dealFields`, {
     method: "POST",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(body),
@@ -78,6 +80,7 @@ async function updatePersonField(accessToken, fieldKey, fieldVal) {
   return await fetch(`https://api.pipedrive.com/v1/personFields`, {
     method: "PUT",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(body),
@@ -90,6 +93,7 @@ async function updateDealField(accessToken, fieldKey, fieldVal) {
   return await fetch(`https://api.pipedrive.com/v1/dealFields`, {
     method: "PUT",
     headers: {
+      "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     },
     body: JSON.stringify(body),
