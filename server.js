@@ -1,6 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { OAuth2Strategy } from "passport-oauth";
+import cors from "cors";
 import {
   getUser,
   refreshToken,
@@ -18,6 +19,8 @@ const app = express();
 const clientID = process.env.CLIENT_ID || "<YOUR_CLIENT_ID>";
 const clientSecret = process.env.CLIENT_SECRET || "<YOUR_CLIENT_SECRET>";
 const callbackURL = process.env.CALLBACK_URL || "<YOUR_CALLBACK_URL>";
+
+app.use(cors());
 
 passport.use(
   "pipedrive",

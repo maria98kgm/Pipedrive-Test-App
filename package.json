@@ -18,6 +18,7 @@
   "author": "Maria Kagremanova",
   "license": "ISC",
   "dependencies": {
+    "cors": "^2.8.5",
     "dotenv": "^16.0.3",
     "express": "^4.16.2",
     "mongodb": "^5.5.0",
