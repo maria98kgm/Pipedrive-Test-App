@@ -18,7 +18,7 @@ export default class UsersDAO {
       const pipeline = [
         {
           $match: {
-            user_id: user_id,
+            user_id: Number(user_id),
           },
         },
       ];
