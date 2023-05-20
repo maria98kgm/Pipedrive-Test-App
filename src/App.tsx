@@ -2,18 +2,37 @@ import { useEffect, useState } from "react";
 import AppExtensionsSDK from "@pipedrive/app-extensions-sdk";
 import "./App.css";
 
+const apiBase = "https://pipedrive-app-backend.onrender.com";
+
+interface UserData {
+  userId?: string;
+}
+
 function App() {
-  const [dealId, setDealId] = useState("");
+  const [user, setUser] = useState();
 
   useEffect(() => {
     initializeSDK();
+    getUserData();
   }, []);
 
-  async function initializeSDK() {
+  const initializeSDK = async () => {
     await new AppExtensionsSDK().initialize();
-  }
+  };
 
-  console.log(window.location.href);
+  const getUserData = () => {
+    const userData: UserData = {};
+    const searchParams = Object.fromEntries(new URLSearchParams(window.location.search));
+
+    userData.userId = searchParams.user_id;
+    fetch(`${apiBase}/user?user_id=${searchParams.user_id}`, {
+      headers: {
+        "Access-Control-Allow-Origin": "https://pipedrive-app-backend.onrender.com",
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => console.log(data));
+  };
 
   return (
     <>
