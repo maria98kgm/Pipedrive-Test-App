@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { OAuth2Strategy } from "passport-oauth";
-import { getUser } from "./api/users.controller.js";
+import { getUser, refreshToken } from "./api/users.controller.js";
 import UsersDAO from "./api/usersDAO.js";
 
 const app = express();
@@ -41,6 +41,17 @@ app.get("/auth/pipedrive/callback", function (req, res, next) {
 app.get("/user", async (req, res) => {
   const user = await UsersDAO.getUser(req.query.domain_name);
   res.json({ user: user });
+});
+
+app.get("/refresh_token", async (req, res) => {
+  const user = await UsersDAO.getUser(req.query.domain_name);
+  const newUserData = await refreshToken(user.data.refresh_token);
+  const updatedUser = await UsersDAO.putUser(
+    newUserData.data.company_domain,
+    newUserData.data.token,
+    newUserData.data.refresh_token
+  );
+  res.json({ user: user, newUserData: newUserData, updatedUser: updatedUser });
 });
 
 export default app;

@@ -1,16 +1,9 @@
-import request from "request-promise";
-
 async function getUser(accessToken) {
-  const requestOptions = {
-    uri: "https://api.pipedrive.com/v1/users/me",
+  return await fetch("https://api.pipedrive.com/v1/users/me", {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
-    json: true,
-  };
-  const userInfo = await request(requestOptions);
-
-  return userInfo;
+  }).then((res) => res.json());
 }
 
 async function getDeals(accessToken) {
@@ -42,4 +35,17 @@ async function updateDeal(id, outcome, accessToken) {
   await request(requestOptions);
 }
 
-export { getUser, getDeals, updateDeal };
+async function refreshToken(company_domain, refreshToken) {
+  return await fetch("https://oauth.pipedrive.com/oauth/token", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/x-www-form-urlencoded",
+    },
+    body: {
+      grant_type: "refresh_token",
+      refresh_token: refreshToken,
+    },
+  }).then((res) => res.json());
+}
+
+export { getUser, getDeals, updateDeal, refreshToken };
