@@ -52,17 +52,16 @@ app.get("/refresh_token", async (req, res) => {
 
 app.get("/person_fields", async (req, res) => {
   const user = await UsersDAO.getUser(req.query.domain_name);
-  console.log("dddddddddd", user);
-  const personFields = await getPersonFields(user.domain_name, user.token);
+  const personFields = await getPersonFields(user.token);
 
   res.json({ personFields: personFields });
 });
 
 app.get("/deal_fields", async (req, res) => {
   const user = await UsersDAO.getUser(req.query.domain_name);
-  const personFields = await getDealFields(user.domain_name, user.token);
+  const dealFields = await getDealFields(user.token);
 
-  res.json({ dealFields: personFields });
+  res.json({ dealFields: dealFields });
 });
 
 export default app;

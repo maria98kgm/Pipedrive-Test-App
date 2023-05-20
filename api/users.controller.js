@@ -26,16 +26,16 @@ async function refreshToken(refreshToken) {
   }).then((res) => res.json());
 }
 
-async function getPersonFields(domainName, accessToken) {
-  return await fetch(`https://${domainName}.pipedrive.com/api/v1/personFields`, {
+async function getPersonFields(accessToken) {
+  return await fetch(`https://api.pipedrive.com/v1/personFields`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   }).then((res) => res.json());
 }
 
-async function getDealFields(domainName, accessToken) {
-  return await fetch(`https://${domainName}.pipedrive.com/api/v1/dealFields`, {
+async function getDealFields(accessToken) {
+  return await fetch(`https://api.pipedrive.com/v1/dealFields`, {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
