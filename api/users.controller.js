@@ -42,4 +42,67 @@ async function getDealFields(accessToken) {
   }).then((res) => res.json());
 }
 
-export { getUser, refreshToken, getPersonFields, getDealFields };
+async function createPersonField(accessToken, fieldName, fieldType) {
+  const body = {
+    name: fieldName,
+    field_type: fieldType,
+  };
+
+  return await fetch(`https://api.pipedrive.com/v1/personFields`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
+}
+
+async function createDealField(accessToken, fieldName, fieldType) {
+  const body = {
+    name: fieldName,
+    field_type: fieldType,
+  };
+
+  return await fetch(`https://api.pipedrive.com/v1/dealFields`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
+}
+
+async function updatePersonField(accessToken, fieldKey, fieldVal) {
+  const body = { [fieldKey]: fieldVal };
+
+  return await fetch(`https://api.pipedrive.com/v1/personFields`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
+}
+
+async function updateDealField(accessToken, fieldKey, fieldVal) {
+  const body = { [fieldKey]: fieldVal };
+
+  return await fetch(`https://api.pipedrive.com/v1/dealFields`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
+}
+
+export {
+  getUser,
+  refreshToken,
+  getPersonFields,
+  getDealFields,
+  createPersonField,
+  createDealField,
+  updatePersonField,
+  updateDealField,
+};

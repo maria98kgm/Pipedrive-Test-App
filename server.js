@@ -1,7 +1,16 @@
 import express from "express";
 import passport from "passport";
 import { OAuth2Strategy } from "passport-oauth";
-import { getUser, refreshToken, getPersonFields, getDealFields } from "./api/users.controller.js";
+import {
+  getUser,
+  refreshToken,
+  getPersonFields,
+  getDealFields,
+  createPersonField,
+  createDealField,
+  updatePersonField,
+  updateDealField,
+} from "./api/users.controller.js";
 import UsersDAO from "./api/usersDAO.js";
 
 const app = express();
@@ -62,6 +71,20 @@ app.get("/deal_fields", async (req, res) => {
   const dealFields = await getDealFields(user.token);
 
   res.json({ dealFields: dealFields });
+});
+
+app.get("/create_person_field", async (req, res) => {
+  const fieldInfo = await UsersDAO.getUser(req.query);
+  const res = await createPersonField(user.token, fieldInfo.fieldName, fieldInfo.fieldType);
+
+  res.json({ res: res });
+});
+
+app.get("/create_deal_field", async (req, res) => {
+  const fieldInfo = await UsersDAO.getUser(req.query.domain_name);
+  const res = await createDealField(user.token, fieldInfo.fieldName, fieldInfo.fieldType);
+
+  res.json({ res: res });
 });
 
 export default app;
