@@ -74,10 +74,10 @@ async function createDealField(accessToken, fieldName, fieldType) {
   }).then((res) => res.json());
 }
 
-async function updatePersonField(accessToken, fieldKey, fieldVal) {
+async function updatePersonField(accessToken, dealId, fieldKey, fieldVal) {
   const body = { [fieldKey]: fieldVal };
 
-  return await fetch(`https://api.pipedrive.com/v1/personFields`, {
+  return await fetch(`https://api.pipedrive.com/v1/persons/${dealId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
@@ -87,10 +87,10 @@ async function updatePersonField(accessToken, fieldKey, fieldVal) {
   }).then((res) => res.json());
 }
 
-async function updateDealField(accessToken, fieldKey, fieldVal) {
+async function updateDealField(accessToken, dealId, fieldKey, fieldVal) {
   const body = { [fieldKey]: fieldVal };
 
-  return await fetch(`https://api.pipedrive.com/v1/dealFields`, {
+  return await fetch(`https://api.pipedrive.com/v1/deals/${dealId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
