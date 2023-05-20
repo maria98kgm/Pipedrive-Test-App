@@ -23,26 +23,32 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const userInfo = await getUser(accessToken);
       await UsersDAO.postUser(userInfo.data, accessToken, refreshToken);
-      done(null, userInfo);
+      done(null, userInfo.data);
     }
   )
 );
 
 app.use(passport.initialize());
 
-app.get("/", (req, res) => {
-  // res.redirect("https://stackoverflow.com/");
-  console.log(req.userInfo);
-  console.log(req);
+// app.get("/", (req, res) => {
+//   // res.redirect("https://stackoverflow.com/");
+//   console.log(req.userInfo);
+//   console.log(req);
+// });
+// app.get(
+//   "/auth/pipedrive/callback",
+//   passport.authenticate("pipedrive", {
+//     session: false,
+//     failureRedirect: "/",
+//     successRedirect: "/",
+//   })
+// );
+app.get("/auth/pipedrive/callback", function (req, res, next) {
+  passport.authenticate("pipedrive", function (err, user) {
+    if (err) return next(err);
+    if (!user) return res.redirect("https://www.pipedrive.com/");
+    return res.redirect(`https://${user.company_domain}.pipedrive.com/`);
+  })(req, res, next);
 });
-app.get("/auth/pipedrive", passport.authenticate("pipedrive"));
-app.get(
-  "/auth/pipedrive/callback",
-  passport.authenticate("pipedrive", {
-    session: false,
-    failureRedirect: "/",
-    successRedirect: "/",
-  })
-);
 
 export default app;
