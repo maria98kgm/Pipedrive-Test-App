@@ -13,6 +13,23 @@ export default class UsersDAO {
     }
   }
 
+  static async getUser(company_domain) {
+    try {
+      const pipeline = [
+        {
+          $match: {
+            company_domain: company_domain,
+          },
+        },
+      ];
+
+      return await users.aggregate(pipeline).next();
+    } catch (err) {
+      console.error(`Unable to post review: ${err}`);
+      return { error: err };
+    }
+  }
+
   static async postUser(user, token, refreshToken) {
     try {
       const userDoc = {
