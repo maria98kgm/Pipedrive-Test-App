@@ -48,47 +48,47 @@ app.get("/auth/pipedrive/callback", function (req, res, next) {
 });
 
 app.get("/user", async (req, res) => {
-  const user = await UsersDAO.getUser(req.query.domain_name);
+  const user = await UsersDAO.getUser(req.query.user_id);
   res.json({ user: user });
 });
 
 app.get("/refresh_token", async (req, res) => {
-  const user = await UsersDAO.getUser(req.query.domain_name);
+  const user = await UsersDAO.getUser(req.query.user_id);
   const newUserData = await refreshToken(user.refresh_token);
-  await UsersDAO.putUser(user.company_domain, newUserData.access_token, newUserData.refresh_token);
+  await UsersDAO.putUser(user.user_id, newUserData.access_token, newUserData.refresh_token);
   res.json({ token: newUserData.access_token });
 });
 
 app.get("/person_fields", async (req, res) => {
-  const user = await UsersDAO.getUser(req.query.domain_name);
+  const user = await UsersDAO.getUser(req.query.user_id);
   const personFields = await getPersonFields(user.token);
 
   res.json({ personFields: personFields });
 });
 
 app.get("/deal_fields", async (req, res) => {
-  const user = await UsersDAO.getUser(req.query.domain_name);
+  const user = await UsersDAO.getUser(req.query.user_id);
   const dealFields = await getDealFields(user.token);
 
   res.json({ dealFields: dealFields });
 });
 
 app.get("/create_person_field", async (req, res) => {
-  const user = await UsersDAO.getUser(req.query.domain_name);
+  const user = await UsersDAO.getUser(req.query.user_id);
   const apiRes = await createPersonField(user.token, req.query.fieldName, req.query.fieldType);
 
   res.json({ res: apiRes });
 });
 
 app.get("/create_deal_field", async (req, res) => {
-  const user = await UsersDAO.getUser(req.query.domain_name);
+  const user = await UsersDAO.getUser(req.query.user_id);
   const apiRes = await createDealField(user.token, req.query.fieldName, req.query.fieldType);
 
   res.json({ res: apiRes });
 });
 
 app.get("/update_person_field", async (req, res) => {
-  const user = await UsersDAO.getUser(req.query.domain_name);
+  const user = await UsersDAO.getUser(req.query.user_id);
   const apiRes = await updatePersonField(
     user.token,
     req.query.dealId,
@@ -100,7 +100,7 @@ app.get("/update_person_field", async (req, res) => {
 });
 
 app.get("/update_deal_field", async (req, res) => {
-  const user = await UsersDAO.getUser(req.query.domain_name);
+  const user = await UsersDAO.getUser(req.query.user_id);
   const apiRes = await updateDealField(
     user.token,
     req.query.dealId,

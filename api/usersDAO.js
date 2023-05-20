@@ -13,12 +13,12 @@ export default class UsersDAO {
     }
   }
 
-  static async getUser(company_domain) {
+  static async getUser(user_id) {
     try {
       const pipeline = [
         {
           $match: {
-            company_domain: company_domain,
+            user_id: user_id,
           },
         },
       ];
@@ -48,9 +48,9 @@ export default class UsersDAO {
     }
   }
 
-  static async putUser(company_domain, newToken, newRefreshToken) {
+  static async putUser(user_id, newToken, newRefreshToken) {
     try {
-      const userToUpdate = { company_domain: company_domain };
+      const userToUpdate = { user_id: user_id };
       const updateUser = await users.updateOne(userToUpdate, {
         $set: { token: newToken, refresh_token: newRefreshToken },
       });
