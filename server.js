@@ -47,8 +47,8 @@ app.get("/refresh_token", async (req, res) => {
   const user = await UsersDAO.getUser(req.query.domain_name);
   const newUserData = await refreshToken(user.refresh_token);
   const updatedUser = await UsersDAO.putUser(
-    newUserData.company_domain,
-    newUserData.token,
+    user.company_domain,
+    newUserData.access_token,
     newUserData.refresh_token
   );
   res.json({ user: user, newUserData: newUserData, updatedUser: updatedUser });

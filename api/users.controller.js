@@ -39,10 +39,11 @@ async function updateDeal(id, outcome, accessToken) {
 }
 
 async function refreshToken(refreshToken) {
-  const bodyParams = JSON.stringify({
+  const bodyParams = {
     grant_type: "refresh_token",
     refresh_token: refreshToken,
-  });
+  };
+  const urlEncoded = new URLSearchParams(Object.entries(bodyParams)).toString();
 
   return await fetch("https://oauth.pipedrive.com/oauth/token", {
     method: "POST",
@@ -50,7 +51,7 @@ async function refreshToken(refreshToken) {
       Authorization: "Basic " + Buffer.from(clientID + ":" + clientSecret).toString("base64"),
       "Content-Type": "application/x-www-form-urlencoded",
     },
-    body: bodyParams,
+    body: urlEncoded,
   }).then((res) => res.json());
 }
 
