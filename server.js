@@ -45,11 +45,11 @@ app.get("/user", async (req, res) => {
 
 app.get("/refresh_token", async (req, res) => {
   const user = await UsersDAO.getUser(req.query.domain_name);
-  const newUserData = await refreshToken(user.data.refresh_token);
+  const newUserData = await refreshToken(user.refresh_token);
   const updatedUser = await UsersDAO.putUser(
-    newUserData.data.company_domain,
-    newUserData.data.token,
-    newUserData.data.refresh_token
+    newUserData.company_domain,
+    newUserData.token,
+    newUserData.refresh_token
   );
   res.json({ user: user, newUserData: newUserData, updatedUser: updatedUser });
 });

@@ -35,7 +35,7 @@ async function updateDeal(id, outcome, accessToken) {
   await request(requestOptions);
 }
 
-async function refreshToken(company_domain, refreshToken) {
+async function refreshToken(refreshToken) {
   return await fetch("https://oauth.pipedrive.com/oauth/token", {
     method: "POST",
     headers: {
