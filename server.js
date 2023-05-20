@@ -87,4 +87,18 @@ app.get("/create_deal_field", async (req, res) => {
   res.json({ res: apiRes });
 });
 
+app.get("/update_person_field", async (req, res) => {
+  const user = await UsersDAO.getUser(req.query.domain_name);
+  const apiRes = await updatePersonField(user.token, req.query.fieldKey, req.query.fieldVal);
+
+  res.json({ res: apiRes });
+});
+
+app.get("/update_deal_field", async (req, res) => {
+  const user = await UsersDAO.getUser(req.query.domain_name);
+  const apiRes = await updateDealField(user.token, req.query.fieldKey, req.query.fieldVal);
+
+  res.json({ res: apiRes });
+});
+
 export default app;
