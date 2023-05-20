@@ -9,35 +9,6 @@ async function getUser(accessToken) {
   }).then((res) => res.json());
 }
 
-async function getDeals(accessToken) {
-  const requestOptions = {
-    uri: "https://api.pipedrive.com/v1/deals",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    qs: { status: "open" },
-    json: true,
-  };
-  const deals = await request(requestOptions);
-
-  return deals;
-}
-
-async function updateDeal(id, outcome, accessToken) {
-  const requestOptions = {
-    uri: `https://api.pipedrive.com/v1/deals/${id}`,
-    method: "PUT",
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    json: {
-      status: outcome,
-    },
-  };
-
-  await request(requestOptions);
-}
-
 async function refreshToken(refreshToken) {
   const bodyParams = {
     grant_type: "refresh_token",
@@ -55,4 +26,20 @@ async function refreshToken(refreshToken) {
   }).then((res) => res.json());
 }
 
-export { getUser, getDeals, updateDeal, refreshToken };
+async function getPersonFields(domainName, accessToken) {
+  return await fetch(`https://${domainName}.pipedrive.com/api/v1/personFields`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).then((res) => res.json());
+}
+
+async function getDealFields(domainName, accessToken) {
+  return await fetch(`https://${domainName}.pipedrive.com/api/v1/dealFields`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).then((res) => res.json());
+}
+
+export { getUser, refreshToken, getPersonFields, getDealFields };

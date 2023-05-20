@@ -1,7 +1,7 @@
 import express from "express";
 import passport from "passport";
 import { OAuth2Strategy } from "passport-oauth";
-import { getUser, refreshToken } from "./api/users.controller.js";
+import { getUser, refreshToken, getPersonFields, getDealFields } from "./api/users.controller.js";
 import UsersDAO from "./api/usersDAO.js";
 
 const app = express();
@@ -46,12 +46,23 @@ app.get("/user", async (req, res) => {
 app.get("/refresh_token", async (req, res) => {
   const user = await UsersDAO.getUser(req.query.domain_name);
   const newUserData = await refreshToken(user.refresh_token);
-  const updatedUser = await UsersDAO.putUser(
-    user.company_domain,
-    newUserData.access_token,
-    newUserData.refresh_token
-  );
-  res.json({ user: user, newUserData: newUserData, updatedUser: updatedUser });
+  await UsersDAO.putUser(user.company_domain, newUserData.access_token, newUserData.refresh_token);
+  res.json({ token: newUserData.access_token });
+});
+
+app.get("/person_fields", async (req, res) => {
+  const user = await UsersDAO.getUser(req.query.domain_name);
+  console.log("dddddddddd", user);
+  const personFields = await getPersonFields(user.domain_name, user.token);
+
+  res.json({ personFields: personFields });
+});
+
+app.get("/deal_fields", async (req, res) => {
+  const user = await UsersDAO.getUser(req.query.domain_name);
+  const personFields = await getDealFields(user.domain_name, user.token);
+
+  res.json({ dealFields: personFields });
 });
 
 export default app;
