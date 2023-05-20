@@ -1,50 +1,25 @@
 import { useEffect, useState } from "react";
 import AppExtensionsSDK from "@pipedrive/app-extensions-sdk";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
 import "./App.css";
 
 function App() {
-  const [count, setCount] = useState(0);
-  // const [token, setToken] = useState("");
   const [dealId, setDealId] = useState("");
 
   useEffect(() => {
     initializeSDK();
-    const urlSearchParams = new URLSearchParams(window.location.search);
-    setDealId(urlSearchParams.get("selectedIds") || "");
-    localStorage.setItem("name", "nnnnn");
-    console.log(localStorage.getItem("name"));
   }, []);
 
   async function initializeSDK() {
     await new AppExtensionsSDK().initialize();
-    // const { token } = await sdk.execute(Command.GET_SIGNED_TOKEN);
-
-    // if (token) {
-    //   setToken(token);
-    //   fetch(`https://api.pipedrive.com/v1/users/me?api_token=${token}`)
-    //     .then((res) => res.json())
-    //     .then((res) => console.log("res", res));
-    // }
   }
 
-  // console.log(token, dealId);
-  console.log(dealId, window.location.href);
+  console.log(window.location.href);
 
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
+      <div></div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>count is {count}</button>
         <p>
           Edit <code>src/App.tsx</code> and save to test HMR
         </p>
