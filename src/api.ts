@@ -114,3 +114,11 @@ export const getFormDefaultValues = (
     Area: area,
   };
 };
+
+export const createNote = (userId: string, dealId: string, content: string) => {
+  return fetch(`${apiBase}/create_note?user_id=${userId}&dealId=${dealId}&content=${content}`)
+    .then((res) => {
+      console.log(res);
+    })
+    .catch((err) => console.log(err));
+};

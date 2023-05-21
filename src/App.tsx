@@ -4,6 +4,7 @@ import AppExtensionsSDK from "@pipedrive/app-extensions-sdk";
 import "./App.css";
 import { UserData, IFormInput } from "./interfaces";
 import {
+  createNote,
   getFormDefaultValues,
   getJobFieldsKeys,
   getJobFieldsValues,
@@ -85,7 +86,13 @@ const Form: React.FC<{
       const jobFieldsValues: { [key: string]: string } = await getJobFieldsValues(userId, dealId);
       const defaultValues = getFormDefaultValues(jobFieldsKeys, jobFieldsValues);
       reset(defaultValues);
-      handleLinkChange(`https://${user.domainName}.pipedrive.com/deal/${user.dealId}`);
+      const link = `https://${user.domainName}.pipedrive.com/deal/${user.dealId}`;
+      handleLinkChange(`link`);
+      createNote(
+        user.id,
+        user.dealId,
+        `<div><p>Job is created!</p><a href="${link}">View Job</a></div>`
+      );
     } catch (err) {
       console.log(err);
     } finally {
