@@ -129,7 +129,7 @@ const Form: React.FC<{
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {loading ? <p className="text-xl mb-4 text-slate-600">Getting current job data...</p> : null}
+      {loading ? <p className="text-xl mb-4 text-slate-600">Loading data...</p> : null}
       <fieldset disabled={loading}>
         <div className="flex gap-8 mb-8">
           <div className="flex flex-col gap-5 max-w-md border p-5 rounded-lg w-full box-shadow">
