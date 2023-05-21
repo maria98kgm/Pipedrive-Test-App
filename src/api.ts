@@ -85,14 +85,21 @@ export const getFormDefaultValues = (
   fieldsKeys: { name: string; key: string }[],
   fieldsValues: { [key: string]: string }
 ) => {
-  const fullAddress = findFieldValue("Address", fieldsKeys, fieldsValues).split(",");
-  const zipCode = fullAddress[fullAddress.length - 2].split(" ").filter((item) => item !== "")[1];
-  const state = fullAddress[fullAddress.length - 2].split(" ").filter((item) => item !== "")[0];
-  const city = fullAddress[fullAddress.length - 3]
-    .split(" ")
-    .filter((item) => item !== "")
-    .join("");
-  const address = fullAddress.slice(0, fullAddress.length - 3).join(",");
+  const addressValue = findFieldValue("Address", fieldsKeys, fieldsValues);
+  const fullAddress = addressValue ? addressValue.split(",") : "";
+  const zipCode = addressValue
+    ? fullAddress[fullAddress.length - 2].split(" ").filter((item) => item !== "")[1]
+    : "";
+  const state = addressValue
+    ? fullAddress[fullAddress.length - 2].split(" ").filter((item) => item !== "")[0]
+    : "";
+  const city = addressValue
+    ? fullAddress[fullAddress.length - 3]
+        .split(" ")
+        .filter((item) => item !== "")
+        .join("")
+    : "";
+  const address = addressValue ? fullAddress.slice(0, fullAddress.length - 3).join(",") : "";
   const area = findFieldValue("Area", fieldsKeys, fieldsValues);
 
   return {
