@@ -116,6 +116,19 @@ async function getDealDetails(accessToken, dealId) {
   }).then((res) => res.json());
 }
 
+export async function postNote(accessToken, dealId, content) {
+  const body = { deal_id: dealId, content: content };
+
+  return await fetch("https://api.pipedrive.com/v1/notes", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    },
+    body: JSON.stringify(body),
+  }).then((res) => res.json());
+}
+
 export {
   getUser,
   refreshToken,
