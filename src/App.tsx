@@ -3,7 +3,13 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import AppExtensionsSDK from "@pipedrive/app-extensions-sdk";
 import "./App.css";
 import { UserData, IFormInput } from "./interfaces";
-import { getFormDefaultValues, getJobFields, getNewToken, updateJobFields } from "./api.ts";
+import {
+  getFormDefaultValues,
+  getJobFieldsKeys,
+  getJobFieldsValues,
+  getNewToken,
+  updateJobFields,
+} from "./api.ts";
 
 function App() {
   const [user, setUser] = useState<UserData>({ id: "", dealId: "" });
@@ -15,41 +21,39 @@ function App() {
   } = useForm<IFormInput>();
 
   useEffect(() => {
-    // initializeSDK();
+    initializeSDK();
     const searchParams = Object.fromEntries(new URLSearchParams(window.location.search));
-    setUser({ id: searchParams.user_id, dealId: searchParams.selectedIds });
-    setFormDefaultValues(searchParams.user_id);
+    setUser({ id: searchParams.userId, dealId: searchParams.selectedIds });
+    setFormDefaultValues(searchParams.userId, searchParams.selectedIds);
   }, []);
-
-  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
-    await getNewToken(user.id);
-    const availableFields = await getJobFields(user.id);
-
-    const formData = { ...data };
-
-    formData.Address += ` ${formData.City}, ${formData.State} ${formData["Zip code"]}, ${formData.Area}`;
-    formData[`${formData.Area} Technician`] = formData["Test select"];
-
-    delete formData.City;
-    delete formData.State;
-    delete formData["Zip code"];
-    delete formData.Area;
-    delete formData["Test select"];
-
-    updateJobFields(user.id, user.dealId, availableFields, Object.entries(formData));
-  };
 
   const initializeSDK = async () => {
     await new AppExtensionsSDK().initialize();
   };
 
-  const setFormDefaultValues = async (userId) => {
+  const setFormDefaultValues = async (userId: string, dealId: string) => {
     await getNewToken(userId);
-    const jobCurrentFields = await getJobFields(userId);
-    const defaultValues = getFormDefaultValues(jobCurrentFields);
-    console.log(jobCurrentFields);
-    // console.log(defaultValues, jobCurrentFields);
-    // reset(defaultValues);
+    const jobFieldsKeys: { name: string; key: string }[] = await getJobFieldsKeys(userId);
+    const jobFieldsValues: { [key: string]: string } = await getJobFieldsValues(userId, dealId);
+    const defaultValues = getFormDefaultValues(jobFieldsKeys, jobFieldsValues);
+    reset(defaultValues);
+  };
+
+  const onSubmit: SubmitHandler<IFormInput> = async (data) => {
+    await getNewToken(user.id);
+    const availableFields = await getJobFieldsKeys(user.id);
+
+    const formData = { ...data };
+
+    formData.Address += `, ${formData.City}, ${formData.State} ${formData["Zip code"]}, ${formData.Area}`;
+    formData[`${formData.Area} Technician`] = formData["Test select"];
+
+    delete formData.City;
+    delete formData.State;
+    delete formData["Zip code"];
+    delete formData["Test select"];
+
+    updateJobFields(user.id, user.dealId, availableFields, Object.entries(formData));
   };
 
   return (
@@ -71,12 +75,12 @@ function App() {
           <input
             type="tel"
             placeholder="Phone"
-            {...register("Phone", { required: true, pattern: /^\+[0-9]+$/i })}
+            {...register("Phone", { required: true, pattern: /^[0-9]+$/i })}
           />
           {errors["Phone"]?.type === "required" ? (
             <p role="alert">Phone type is required</p>
           ) : errors["Phone"]?.type === "pattern" ? (
-            <p role="alert">Incorrect phone number</p>
+            <p role="alert">Incorrect phone number! Only numbers allowed</p>
           ) : null}
         </div>
         <input type="email" placeholder="Email (Optional)" {...register("Email")} />
