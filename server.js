@@ -14,6 +14,7 @@ import {
   getPersonDetails,
   getDealDetails,
   postNote,
+  createJobFields,
 } from "./api/users.controller.js";
 import UsersDAO from "./api/usersDAO.js";
 
@@ -38,6 +39,8 @@ passport.use(
     async (accessToken, refreshToken, profile, done) => {
       const userInfo = await getUser(accessToken);
       await UsersDAO.postUser(userInfo.data, accessToken, refreshToken);
+      const currentDealFields = await getDealFields(accessToken);
+      createJobFields(accessToken, currentDealFields.data);
       done(null, userInfo.data);
     }
   )

@@ -116,7 +116,7 @@ async function getDealDetails(accessToken, dealId) {
   }).then((res) => res.json());
 }
 
-export async function postNote(accessToken, dealId, content) {
+async function postNote(accessToken, dealId, content) {
   const body = { deal_id: dealId, content: content };
 
   return await fetch("https://api.pipedrive.com/v1/notes", {
@@ -127,6 +127,28 @@ export async function postNote(accessToken, dealId, content) {
     },
     body: JSON.stringify(body),
   }).then((res) => res.json());
+}
+
+const fields = [
+  "Job type",
+  "Job source",
+  "Job description",
+  "Job date",
+  "Job start time",
+  "Job end time",
+  "Address",
+  "Area",
+];
+
+async function createJobFields(accessToken, currentDealFields, arr = fields) {
+  const fieldPresent = currentDealFields.find((item) => item.name === arr[0]);
+  if (!fieldPresent) {
+    return await createDealField(accessToken, arr[0], "text").then((res) => {
+      if (arr.length > 1) createJobFields(accessToken, currentDealFields, arr.slice(1));
+    });
+  }
+  if (arr.length > 1) return createJobFields(accessToken, currentDealFields, arr.slice(1));
+  return;
 }
 
 export {
@@ -140,4 +162,6 @@ export {
   updateDealField,
   getPersonDetails,
   getDealDetails,
+  postNote,
+  createJobFields,
 };
