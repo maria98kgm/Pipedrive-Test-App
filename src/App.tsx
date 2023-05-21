@@ -20,6 +20,11 @@ interface IFormInput {
   "Job start time": string;
   "Job end time": string;
   "Test select": string;
+  Address: string;
+  City: string;
+  State: string;
+  "Zip code": string;
+  Area: string;
 }
 
 const apiBase = "https://pipedrive-app-backend.onrender.com";
@@ -33,6 +38,7 @@ function App() {
   } = useForm<IFormInput>();
 
   useEffect(() => {
+    initializeSDK();
     const searchParams = Object.fromEntries(new URLSearchParams(window.location.search));
     setUser({ id: searchParams.user_id, dealId: searchParams.selectedIds });
   }, []);
@@ -40,7 +46,19 @@ function App() {
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     await getNewToken(user.id);
     const availableFields = await getJobFields(user.id);
-    updateJobFields(user.id, user.dealId, availableFields, Object.entries(data));
+
+    const formData = { ...data };
+
+    formData.Address += ` ${formData.City}, ${formData.State} ${formData["Zip code"]}, ${formData.Area}`;
+    formData[`${formData.Area} Technician`] = formData["Test select"];
+
+    delete formData.City;
+    delete formData.State;
+    delete formData["Zip code"];
+    delete formData.Area;
+    delete formData["Test select"];
+
+    updateJobFields(user.id, user.dealId, availableFields, Object.entries(formData));
   };
 
   const initializeSDK = async () => {
@@ -98,11 +116,16 @@ function App() {
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem", minWidth: "300px" }}>
         <p>Service location</p>
-        <input placeholder="Address" />
-        <input placeholder="City" />
-        <input placeholder="State" />
-        <input placeholder="Zip code" />
-        <input placeholder="Area" />
+        <input placeholder="Address" {...register("Address", { required: true })} />
+        {errors["Address"]?.type === "required" && <p role="alert">Address is required</p>}
+        <input placeholder="City" {...register("City", { required: true })} />
+        {errors["City"]?.type === "required" && <p role="alert">City is required</p>}
+        <input placeholder="State" {...register("State", { required: true })} />
+        {errors["State"]?.type === "required" && <p role="alert">State is required</p>}
+        <input placeholder="Zip code" {...register("Zip code", { required: true })} />
+        {errors["Zip code"]?.type === "required" && <p role="alert">Zip code is required</p>}
+        <input placeholder="Area" {...register("Area", { required: true })} />
+        {errors["Area"]?.type === "required" && <p role="alert">Area is required</p>}
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "1rem", minWidth: "300px" }}>
@@ -157,14 +180,14 @@ const personFields = ["First name", "Last name", "Phone", "Email"];
 async function updateJobFields(userId, dealId, availableFields, formData) {
   const formField = formData[0];
   let jobField = availableFields.find((item) => item.name === formField[0]);
-  const personEndpoint = personFields.includes(jobField.name);
+  const personEndpoint = jobField ? personFields.includes(jobField.name) : false;
 
   if (!personEndpoint && !jobField) {
     await fetch(
       `${apiBase}/create_deal_field?user_id=${userId}&fieldName=${formField[0]}&fieldType=text`
     )
       .then((res) => res.json())
-      .then((res) => (jobField = res.data))
+      .then((res) => (jobField = res.res.data))
       .catch((err) => console.log(err));
   }
 
