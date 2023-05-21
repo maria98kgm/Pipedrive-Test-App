@@ -86,13 +86,6 @@ const Form: React.FC<{
       const jobFieldsValues: { [key: string]: string } = await getJobFieldsValues(userId, dealId);
       const defaultValues = getFormDefaultValues(jobFieldsKeys, jobFieldsValues);
       reset(defaultValues);
-      const link = `https://${user.domainName}.pipedrive.com/deal/${user.dealId}`;
-      handleLinkChange(`link`);
-      createNote(
-        user.id,
-        user.dealId,
-        `<div><p>Job is created!</p><a href="${link}">View Job</a></div>`
-      );
     } catch (err) {
       console.log(err);
     } finally {
@@ -118,10 +111,15 @@ const Form: React.FC<{
       delete formData["Test select"];
 
       await updateJobFields(user.id, user.dealId, availableFields, Object.entries(formData));
+
+      const link = `https://${user.domainName}.pipedrive.com/deal/${user.dealId}`;
+      await createNote(user.id, user.dealId, `Job is created! <a href='${link}'>View Job</a>`);
+
       setLoading(false);
+      handleLinkChange(`https://${user.domainName}.pipedrive.com/deal/${user.dealId}`);
       handleRequestChange("success");
     } catch (err) {
-      console.log(err);
+      await createNote(user.id, user.dealId, `<p>Request failed. Job wasn't created</p>`);
       setLoading(false);
       handleRequestChange("failure");
     }
@@ -131,7 +129,7 @@ const Form: React.FC<{
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      {loading ? <p className="text-xl mb-4">Getting current job data...</p> : null}
+      {loading ? <p className="text-xl mb-4 text-slate-600">Getting current job data...</p> : null}
       <fieldset disabled={loading}>
         <div className="flex gap-8 mb-8">
           <div className="flex flex-col gap-4 max-w-md border p-5 rounded-lg w-full">
