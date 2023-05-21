@@ -40,7 +40,9 @@ export default class UsersDAO {
         refresh_token: refreshToken,
         date: new Date(new Date().getTime() + 3600000),
       };
+      const userExists = await this.getUser(user.id);
 
+      if (userExists) return await this.putUser(user.id, token, refreshToken);
       return await users.insertOne(userDoc);
     } catch (err) {
       console.error(`Unable to post user: ${err}`);
