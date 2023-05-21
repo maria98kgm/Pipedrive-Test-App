@@ -5,7 +5,7 @@ import UsersDAO from "./api/usersDAO.js";
 dotenv.config();
 
 const MongoClient = mongodb.MongoClient;
-const port = 3000;
+const port = 5000;
 
 MongoClient.connect(process.env.MONGO_URI, {
   wtimeoutMS: 2500,
