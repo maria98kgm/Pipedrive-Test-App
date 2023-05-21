@@ -61,8 +61,12 @@ app.get("/user", async (req, res) => {
 app.get("/refresh_token", async (req, res) => {
   const user = await UsersDAO.getUser(req.query.user_id);
   const newUserData = await refreshToken(user.refresh_token);
-  await UsersDAO.putUser(user.user_id, newUserData.access_token, newUserData.refresh_token);
-  res.json({ token: newUserData.access_token });
+  if (user.refresh_token) {
+    await UsersDAO.putUser(user.user_id, newUserData.access_token, newUserData.refresh_token);
+    res.json({ token: newUserData.access_token });
+  } else {
+    res.json({ token: null });
+  }
 });
 
 app.get("/person_fields", async (req, res) => {
