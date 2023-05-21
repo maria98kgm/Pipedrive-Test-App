@@ -1,5 +1,14 @@
 const apiBase = "https://pipedrive-app-backend.onrender.com";
 
+export const getUser = (userId: string) => {
+  return fetch(`${apiBase}/user?user_id=${userId}`)
+    .then((res) => {
+      return res.json();
+    })
+    .then((res) => res.user)
+    .catch((err) => console.log(err));
+};
+
 export const getNewToken = async (userId: string) => {
   return fetch(`${apiBase}/refresh_token?user_id=${userId}`).catch((err) => console.log(err));
 };

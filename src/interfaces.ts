@@ -1,6 +1,7 @@
 export interface UserData {
   id: string;
   dealId: string;
+  domainName: string;
 }
 
 export interface IFormInput {
