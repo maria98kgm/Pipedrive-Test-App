@@ -23,7 +23,7 @@ function App() {
 
   const initializeSDK = async () => {
     try {
-      await new AppExtensionsSDK().initialize();
+      const sdk = await new AppExtensionsSDK().initialize({ size: { height: 500, width: 860 } });
     } catch (err) {
       console.log(err);
     }
@@ -132,41 +132,49 @@ const Form: React.FC<{
       {loading ? <p className="text-xl mb-4 text-slate-600">Getting current job data...</p> : null}
       <fieldset disabled={loading}>
         <div className="flex gap-8 mb-8">
-          <div className="flex flex-col gap-4 max-w-md border p-5 rounded-lg w-full">
+          <div className="flex flex-col gap-5 max-w-md border p-5 rounded-lg w-full box-shadow">
             <p className="text-lg text-left">Client Details</p>
             <div className="flex gap-2">
-              <div>
+              <div className="relative">
                 <input placeholder="First Name" {...register("First name", { required: true })} />
                 {errors["First name"]?.type === "required" && (
-                  <p role="alert">First name is required</p>
+                  <p role="alert" className="validation-note">
+                    First name is required
+                  </p>
                 )}
               </div>
-              <div>
+              <div className="relative">
                 <input placeholder="Last Name" {...register("Last name", { required: true })} />
                 {errors["Last name"]?.type === "required" && (
-                  <p role="alert">Last name is required</p>
+                  <p role="alert" className="validation-note">
+                    Last name is required
+                  </p>
                 )}
               </div>
             </div>
-            <div>
+            <div className="relative">
               <input
                 type="tel"
                 placeholder="Phone"
                 {...register("Phone", { required: true, pattern: /^[0-9]+$/i })}
               />
               {errors["Phone"]?.type === "required" ? (
-                <p role="alert">Phone type is required</p>
+                <p role="alert" className="validation-note">
+                  Phone is required
+                </p>
               ) : errors["Phone"]?.type === "pattern" ? (
-                <p role="alert">Incorrect phone number! Only numbers allowed</p>
+                <p role="alert" className="validation-note">
+                  Incorrect phone number! Only numbers allowed
+                </p>
               ) : null}
             </div>
             <input type="email" placeholder="Email (Optional)" {...register("Email")} />
           </div>
 
-          <div className="flex flex-col gap-4 max-w-md border p-5 rounded-lg w-full">
+          <div className="flex flex-col gap-5 max-w-md border p-5 rounded-lg w-full box-shadow">
             <p className="text-lg text-left">Job Details</p>
             <div className="flex gap-2">
-              <div className="w-full">
+              <div className="w-full relative">
                 <select {...register("Job type", { required: true })}>
                   <option value="">Job Type</option>
                   <option value="Developer">Developer</option>
@@ -174,10 +182,12 @@ const Form: React.FC<{
                   <option value="Janitor">Janitor</option>
                 </select>
                 {errors["Job type"]?.type === "required" && (
-                  <p role="alert">Job type is required</p>
+                  <p role="alert" className="validation-note">
+                    Job type is required
+                  </p>
                 )}
               </div>
-              <div className="w-full">
+              <div className="w-full relative">
                 <select {...register("Job source", { required: true })}>
                   <option value="">Job Source</option>
                   <option value="Omaha, NE, United States">Omaha, NE, United States</option>
@@ -185,7 +195,9 @@ const Form: React.FC<{
                   <option value="Zürich, Switzerland ">Zürich, Switzerland</option>
                 </select>
                 {errors["Job source"]?.type === "required" && (
-                  <p role="alert">Job source is required</p>
+                  <p role="alert" className="validation-note">
+                    Job source is required
+                  </p>
                 )}
               </div>
             </div>
@@ -194,43 +206,65 @@ const Form: React.FC<{
         </div>
 
         <div className="flex gap-8 mb-8">
-          <div className="flex flex-col gap-4 max-w-md border p-5 rounded-lg w-full">
+          <div className="flex flex-col gap-5 max-w-md border p-5 rounded-lg w-full box-shadow">
             <p className="text-lg text-left">Service location</p>
-            <div>
+            <div className="relative">
               <input placeholder="Address" {...register("Address", { required: true })} />
-              {errors["Address"]?.type === "required" && <p role="alert">Address is required</p>}
+              {errors["Address"]?.type === "required" && (
+                <p role="alert" className="validation-note">
+                  Address is required
+                </p>
+              )}
             </div>
-            <div>
+            <div className="relative">
               <input placeholder="City" {...register("City", { required: true })} />
-              {errors["City"]?.type === "required" && <p role="alert">City is required</p>}
+              {errors["City"]?.type === "required" && (
+                <p role="alert" className="validation-note">
+                  City is required
+                </p>
+              )}
             </div>
-            <div>
+            <div className="relative">
               <input placeholder="State" {...register("State", { required: true })} />
-              {errors["State"]?.type === "required" && <p role="alert">State is required</p>}
+              {errors["State"]?.type === "required" && (
+                <p role="alert" className="validation-note">
+                  State is required
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
-              <div className="w-full">
+              <div className="w-full relative">
                 <input placeholder="Zip code" {...register("Zip code", { required: true })} />
                 {errors["Zip code"]?.type === "required" && (
-                  <p role="alert">Zip code is required</p>
+                  <p role="alert" className="validation-note">
+                    Zip code is required
+                  </p>
                 )}
               </div>
-              <div className="w-full">
+              <div className="w-full relative">
                 <input placeholder="Area" {...register("Area", { required: true })} />
-                {errors["Area"]?.type === "required" && <p role="alert">Area is required</p>}
+                {errors["Area"]?.type === "required" && (
+                  <p role="alert" className="validation-note">
+                    Area is required
+                  </p>
+                )}
               </div>
             </div>
           </div>
 
-          <div className="flex flex-col gap-4 max-w-md border p-5 rounded-lg w-full">
+          <div className="flex flex-col gap-5 max-w-md border p-5 rounded-lg w-full box-shadow">
             <p className="text-lg text-left">Scheduled</p>
-            <div>
+            <div className="relative">
               <input
                 type="date"
                 placeholder="Start data"
                 {...register("Job date", { required: true })}
               />
-              {errors["Job date"]?.type === "required" && <p role="alert">Job date is required</p>}
+              {errors["Job date"]?.type === "required" && (
+                <p role="alert" className="validation-note">
+                  Job date is required
+                </p>
+              )}
             </div>
             <div className="flex gap-2">
               <input
@@ -246,7 +280,7 @@ const Form: React.FC<{
                 {...register("Job end time", { required: true })}
               />
             </div>
-            <div>
+            <div className="relative">
               <select name="tests" {...register("Test select", { required: true })}>
                 <option value="">Test Select</option>
                 <option value="Ryan Debris">Ryan Debris</option>
@@ -254,7 +288,9 @@ const Form: React.FC<{
                 <option value="Tom Holland">Tom Holland</option>
               </select>
               {errors["Test select"]?.type === "required" && (
-                <p role="alert">Test select is required</p>
+                <p role="alert" className="validation-note">
+                  Test select is required
+                </p>
               )}
             </div>
           </div>
@@ -263,9 +299,7 @@ const Form: React.FC<{
         <div className="flex gap-16 justify-center">
           <button
             type="submit"
-            className={`${
-              requestStatus === "pending" ? "bg-slate-300 text-slate-500" : "bg-lime-600"
-            }`}
+            className={`${loading ? "disabled-submit-button" : "submit-button"}`}
           >
             {submitButtonText}
           </button>

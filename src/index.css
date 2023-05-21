@@ -44,12 +44,33 @@ button:focus-visible {
   outline: 4px auto -webkit-focus-ring-color;
 }
 
+.submit-button {
+  background-color: rgb(101 163 13);
+}
+.disabled-submit-button {
+  background-color: rgb(203 213 225);
+  color: rgb(133, 138, 144);
+}
+
+.validation-note {
+  position: absolute;
+  color: red;
+  bottom: -17px;
+  left: 6px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.box-shadow {
+  box-shadow: rgba(0, 0, 0, 0.18) 0px 2px 4px;
+}
+
 input,
 textarea,
 select {
   display: inline-block;
   width: 100%;
-  border: 1px solid #e5e5e5;
+  border: 1px solid #d1d1d1;
   border-radius: 8px;
   padding: 0.6em 1.2em;
   font-size: 1em;
