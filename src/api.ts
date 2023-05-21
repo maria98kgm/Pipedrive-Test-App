@@ -58,17 +58,19 @@ export const updateJobFields = async (
       .catch((err) => console.log(err));
   }
 
-  return fetch(
+  await fetch(
     `${apiBase}/update_${
       personEndpoint ? "person" : "deal"
     }_field?user_id=${userId}&dealId=${dealId}&fieldKey=${jobField.key}&fieldVal=${formField[1]}`
   )
-    .then(() => {
+    .then(async () => {
       if (formData.length > 1) {
-        updateJobFields(userId, dealId, availableFields, formData.slice(1));
+        await updateJobFields(userId, dealId, availableFields, formData.slice(1));
       }
     })
     .catch((err) => console.log(err));
+
+  return;
 };
 
 const findFieldValue = (

@@ -81,11 +81,10 @@ const Form: React.FC<{
 
   const setFormDefaultValues = async (userId: string, dealId: string) => {
     try {
-      const newToken = await getNewToken(userId);
+      await getNewToken(userId);
       const jobFieldsKeys: { name: string; key: string }[] = await getJobFieldsKeys(userId);
       const jobFieldsValues: { [key: string]: string } = await getJobFieldsValues(userId, dealId);
       const defaultValues = getFormDefaultValues(jobFieldsKeys, jobFieldsValues);
-      console.log(defaultValues);
       reset(defaultValues);
     } catch (err) {
       console.log(err);
@@ -111,7 +110,7 @@ const Form: React.FC<{
       delete formData["Zip code"];
       delete formData["Test select"];
 
-      updateJobFields(user.id, user.dealId, availableFields, Object.entries(formData));
+      await updateJobFields(user.id, user.dealId, availableFields, Object.entries(formData));
 
       const link = `https://${user.domainName}.pipedrive.com/deal/${user.dealId}`;
       await createNote(user.id, user.dealId, `Job is created! <a href='${link}'>View Job</a>`);
