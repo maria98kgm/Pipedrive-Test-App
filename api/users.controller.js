@@ -100,6 +100,22 @@ async function updateDealField(accessToken, dealId, fieldKey, fieldVal) {
   }).then((res) => res.json());
 }
 
+async function getPersonDetails(accessToken, dealId) {
+  return await fetch(`https://api.pipedrive.com/v1/persons/${dealId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).then((res) => res.json());
+}
+
+async function getDealDetails(accessToken, dealId) {
+  return await fetch(`https://api.pipedrive.com/v1/deals/${dealId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  }).then((res) => res.json());
+}
+
 export {
   getUser,
   refreshToken,
@@ -109,4 +125,6 @@ export {
   createDealField,
   updatePersonField,
   updateDealField,
+  getPersonDetails,
+  getDealDetails,
 };

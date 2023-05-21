@@ -11,6 +11,8 @@ import {
   createDealField,
   updatePersonField,
   updateDealField,
+  getPersonDetails,
+  getDealDetails,
 } from "./api/users.controller.js";
 import UsersDAO from "./api/usersDAO.js";
 
@@ -110,6 +112,20 @@ app.get("/update_deal_field", async (req, res) => {
     req.query.fieldKey,
     req.query.fieldVal
   );
+
+  res.json({ res: apiRes });
+});
+
+app.get("/get_person_detail", async (req, res) => {
+  const user = await UsersDAO.getUser(req.query.user_id);
+  const apiRes = await getPersonDetails(user.token, req.query.dealId);
+
+  res.json({ res: apiRes });
+});
+
+app.get("/get_deal_detail", async (req, res) => {
+  const user = await UsersDAO.getUser(req.query.user_id);
+  const apiRes = await getDealDetails(user.token, req.query.dealId);
 
   res.json({ res: apiRes });
 });
