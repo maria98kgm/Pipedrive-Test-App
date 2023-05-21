@@ -2,32 +2,8 @@ import { useEffect, useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import AppExtensionsSDK from "@pipedrive/app-extensions-sdk";
 import "./App.css";
-
-interface UserData {
-  id: string;
-  dealId: string;
-}
-
-interface IFormInput {
-  "First name": string;
-  "Last name": string;
-  Phone: string;
-  Email: string;
-  "Job type": string;
-  "Job source": string;
-  "Job description": string;
-  "Job date": string;
-  "Job start time": string;
-  "Job end time": string;
-  "Test select": string;
-  Address: string;
-  City: string;
-  State: string;
-  "Zip code": string;
-  Area: string;
-}
-
-const apiBase = "https://pipedrive-app-backend.onrender.com";
+import { UserData, IFormInput } from "./interfaces";
+import { getFormDefaultValues, getJobFields, getNewToken, updateJobFields } from "./api.ts";
 
 function App() {
   const [user, setUser] = useState<UserData>({ id: "", dealId: "" });
@@ -35,12 +11,14 @@ function App() {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm<IFormInput>();
 
   useEffect(() => {
-    initializeSDK();
+    // initializeSDK();
     const searchParams = Object.fromEntries(new URLSearchParams(window.location.search));
     setUser({ id: searchParams.user_id, dealId: searchParams.selectedIds });
+    setFormDefaultValues(searchParams.user_id);
   }, []);
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
@@ -63,6 +41,15 @@ function App() {
 
   const initializeSDK = async () => {
     await new AppExtensionsSDK().initialize();
+  };
+
+  const setFormDefaultValues = async (userId) => {
+    await getNewToken(userId);
+    const jobCurrentFields = await getJobFields(userId);
+    const defaultValues = getFormDefaultValues(jobCurrentFields);
+    console.log(jobCurrentFields);
+    // console.log(defaultValues, jobCurrentFields);
+    // reset(defaultValues);
   };
 
   return (
@@ -159,47 +146,3 @@ function App() {
 }
 
 export default App;
-
-const getNewToken = async (userId: string) => {
-  return fetch(`${apiBase}/refresh_token?user_id=${userId}`).catch((err) => console.log(err));
-};
-
-async function getJobFields(userId) {
-  const detailFields = await fetch(`${apiBase}/deal_fields?user_id=${userId}`)
-    .then((res) => res.json())
-    .then((res) => res.dealFields.data);
-  const personFields = await fetch(`${apiBase}/person_fields?user_id=${userId}`)
-    .then((res) => res.json())
-    .then((res) => res.personFields.data);
-
-  return [...detailFields, ...personFields];
-}
-
-const personFields = ["First name", "Last name", "Phone", "Email"];
-
-async function updateJobFields(userId, dealId, availableFields, formData) {
-  const formField = formData[0];
-  let jobField = availableFields.find((item) => item.name === formField[0]);
-  const personEndpoint = jobField ? personFields.includes(jobField.name) : false;
-
-  if (!personEndpoint && !jobField) {
-    await fetch(
-      `${apiBase}/create_deal_field?user_id=${userId}&fieldName=${formField[0]}&fieldType=text`
-    )
-      .then((res) => res.json())
-      .then((res) => (jobField = res.res.data))
-      .catch((err) => console.log(err));
-  }
-
-  return fetch(
-    `${apiBase}/update_${
-      personEndpoint ? "person" : "deal"
-    }_field?user_id=${userId}&dealId=${dealId}&fieldKey=${jobField.key}&fieldVal=${formField[1]}`
-  )
-    .then((res) => {
-      if (formData.length > 1) {
-        updateJobFields(userId, dealId, availableFields, formData.slice(1));
-      }
-    })
-    .catch((err) => console.log(err));
-}
