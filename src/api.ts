@@ -78,7 +78,7 @@ const findFieldValue = (
 ) => {
   const fieldKey = fieldsKeys.find((item) => item.name === fieldName);
   if (fieldName === "Email" || fieldName === "Phone") return fieldsValues[fieldKey.key][0].value;
-  return fieldKey ? fieldsValues[fieldKey.key] : "";
+  return fieldKey && fieldsValues[fieldKey.key] ? fieldsValues[fieldKey.key] : "";
 };
 
 export const getFormDefaultValues = (
